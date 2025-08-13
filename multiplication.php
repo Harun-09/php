@@ -25,6 +25,7 @@ if(isset($_GET['submit'])){
     echo $html;
 }
 }
+btn();
 ?> 
 
 <!-- //1.check if a number is positive or negative using if -->
@@ -62,7 +63,7 @@ evenOrOdd();
 //3.find the largest of two numbers using if -->
 
 <?php
-function lNumber(){
+function lnumber(){
 $num1=10;
 $num2=15;
 if($num1>$num2){
