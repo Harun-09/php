@@ -214,11 +214,10 @@ if (isset($_POST['btn_Name'])) {
 
 <!-- login form -->
 
+<!-- for logout -->
+
 <?php
 session_start();
-
-$_name = "hasnat";
-$_password ="827ccb0eea8a706c4c34a16891f84e7b";
 
 if(isset($_GET['logout'])){
     session_unset();
@@ -226,6 +225,30 @@ if(isset($_GET['logout'])){
     header("location:login.php");
     exit();
 }
+if (isset($_SESSION["name"])){
+    echo "<h2>Welcome, {$_SESSION['name']}</h2>";
+    echo '<a href ="login.php?logout=true">Logout</a>';
+    exit();
+}
+?>
+<br>
+<br>
+
+
+
+<a href="factorial.php?logout=1">Logout</a>
+
+
+
+<!-- for login -->
+
+<?php
+session_start();
+
+$_name = "kamal";
+$_password ="827ccb0eea8a706c4c34a16891f84e7b";
+
+
 
 if(isset($_POST["btn_login"])){
     $name=$_POST['name'];
@@ -235,7 +258,7 @@ if(isset($_POST["btn_login"])){
     if($_name==$name && $_password==md5($password)){
         $message=["login"=>"Welcome $name"];
         $_SESSION["name"] = $name;
-        header("location:form_post.php");  //login er por ja show hobe....
+        header("location:factorial.php");  
         exit();
     }else{
         $message =["login"=>"incorret username or password"];
@@ -243,11 +266,7 @@ if(isset($_POST["btn_login"])){
     }
 }
 
-if (isset($_SESSION["name"])){
-    echo "<h2>Welcome, {$_SESSION['name']}</h2>";
-    echo '<a href ="login.php?logout=true">Logout</a>';
-    exit();
-}
+
 ?>
 
 
@@ -278,5 +297,86 @@ if (isset($_SESSION["name"])){
             <input type="submit" name="btn_login" id="" value="login">
         </form>
     </div>
+</body>
+</html>
+
+
+<!-- login Sir er file -->
+
+<?php
+session_start();
+
+function login($username, $password){
+ $data= file("user.txt");
+
+foreach ($data as $row) {
+   list($name,$pass,$role)=explode(",", $row);
+
+   if($name == $username && $pass== $password){
+       $_SESSION["name"]=$name;
+       $_SESSION["role"]=$role;
+       header("location:app.php");
+     
+      break;
+
+   }else{
+     return ["login"=>"incorrect username or password"];
+   }
+  
+}
+
+}
+
+
+
+
+if(isset($_POST["btn_login"])){
+    $name = $_POST['name'];
+    $password = $_POST['password'];
+ 
+    $message =login($name,$password);
+}
+
+
+
+
+
+
+
+
+?>
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style> 
+        body{
+            display: flex;
+            place-content: center;
+            height: 100vh;
+        }
+    </style>
+</head>
+<body>
+       <div>
+         <h1>Login Form</h1>
+            <form action="login.php" method="POST">
+            <label for="n">Username</label> <br>
+            <input type="text" name="name" id="name"> <br> <br>
+            <label for="n">Password</label> <br>
+            <input type="password" name="password" id="password"><br><br>
+             <?php
+                if(isset($message['login'])){
+                  echo $message['login'];
+                }
+             ?>
+            <input type="submit" name="btn_login" value="login">
+            </form>
+       </div>
+
 </body>
 </html>
